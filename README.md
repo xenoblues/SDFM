@@ -60,7 +60,7 @@ python main_fm.py --cfg he --mode eval --ckpt ./results/he/models/ckpt_ema_500.p
 
 ### Acknowledgments
 
-Part of the code is borrowed from the [Humanmac](https://github.com/LinghaoChan/HumanMAC) repo.
+Part of the code is borrowed from the [HumanMAC](https://github.com/LinghaoChan/HumanMAC) repo.
 
 ### License
 
