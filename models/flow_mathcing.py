@@ -10,6 +10,9 @@ import numpy as np
 import math
 from copy import deepcopy
 
+Heun2_butcher_tableu = [[0.0, 0.0, 0.0],
+                        [1.0, 1.0, 0.0],
+                        [0.0, 1 / 2, 1 / 2]]
 
 class SamplingModel(ModelWrapper):
     def __init__(self, model: Module):
@@ -127,6 +130,19 @@ class FlowMatching:
                         y_mid = self.traj_fusion(traj_pad, y_mid, z_dct, t0, mode_dict['mask'])
                     dy = dt * self.sampling_model(y_mid, t0 + half_dt, dct_mod=traj_dct_mod)
                     y1 = y0 + dy
+                    if t0 <= fusion_traj_till:
+                        y1 = self.traj_fusion(traj_pad, y1, z_dct, t0, mode_dict['mask'])
+                    y0 = y1
+                elif self.cfg.ode_method == 'heun2':
+                    f0 = self.sampling_model(y0, t0, cfg_scale=self.cfg.cfg_scale, dct_mod=traj_dct_mod)
+                    k1 = f0
+                    y_mid = y0 + dt * k1 * Heun2_butcher_tableu[1][1]
+                    if t0 <= fusion_traj_till:
+                        y_mid = self.traj_fusion(traj_pad, y_mid, z_dct, t0, mode_dict['mask'])
+
+                    k2 = self.sampling_model(y_mid, t0 + dt * Heun2_butcher_tableu[1][0],
+                              cfg_scale=self.cfg.cfg_scale, dct_mod=traj_dct_mod)
+                    y1 = y0 + dt * (k1 * Heun2_butcher_tableu[2][1] + k2 * Heun2_butcher_tableu[2][2])
                     if t0 <= fusion_traj_till:
                         y1 = self.traj_fusion(traj_pad, y1, z_dct, t0, mode_dict['mask'])
                     y0 = y1
