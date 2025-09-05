@@ -89,7 +89,7 @@ class FlowMatching:
             y_mid = torch.matmul(self.cfg.dct_m_all[:self.cfg.n_pre], y_mid)  # DCT变换到n_pre帧
         return y_mid
 
-    def sample_fm(self, mode_dict, traj_dct, traj_dct_mod, fusion_traj_till=1.0, mod_till=1.0):
+    def sample_fm(self, mode_dict, traj_dct, traj_dct_mod, fusion_traj_till=0.0, mod_till=1.0):
         with torch.set_grad_enabled(False):
             if self.cfg.edm_schedule:
                 t = get_time_discretization(nfes=self.cfg.ode_options["nfe"])

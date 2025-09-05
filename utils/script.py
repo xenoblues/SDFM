@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 from models.flow_mathcing import FlowMatching
-from models.networks import MotionTransformer
+from models.networks import MotioniTransformer
 from utils import padding_traj
 from utils.visualization import render_animation
 
@@ -30,19 +30,18 @@ def create_model_and_fm(cfg):
         else:
             num_frames = cfg.clip_total
 
-    if cfg.model_name == 'MotionTransformer':
-            model = MotionTransformer(
+    if cfg.model_name == 'MotioniTransformer':
+            model = MotioniTransformer(
                 input_feats=3 * cfg.joint_num,  # 3 means x, y, z
                 num_frames=num_frames,
                 num_layers=cfg.num_layers,
                 num_heads=cfg.num_heads,
                 latent_dim=cfg.latent_dims,
                 dropout=cfg.dropout,
-                cross_attention=cfg.cross_attention,
-                stylization_block=cfg.stylization_block,
+                joint_num=cfg.joint_num,
+                spatial_graph=None,
                 flash_attention=cfg.flash_attention,
-                se_layer=cfg.se_layer,
-                skip_type=cfg.skip_type
+                stylization_block=cfg.stylization_block
             ).to(cfg.device)
 
     if cfg.generator == 'flow_matching':

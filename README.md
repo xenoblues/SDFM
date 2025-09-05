@@ -1,4 +1,4 @@
-## Code for "FMAP: Flow Matching for Human Motion Prediction".
+## Code for "SDFM: Spatial-dominated Flow Matching for Stochastic Human Motion Prediction"
 
 ### Data
 
@@ -33,7 +33,6 @@ Please put the 'ckpt_ema_500.pt' (for HumanEva) in the `./results/he/models` and
 
 For Human3.6M:
 
-The argument '--ode_options' for Human3.6M is recommended as '{"step_size": 0.1}'.
 ```
 python main_fm.py --cfg h36m --mode train
 ```
